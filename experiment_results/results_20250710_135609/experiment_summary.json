@@ -1,0 +1,71 @@
+{
+  "performance_results": {
+    "simple_scan": {
+      "gpu_on": 969.494,
+      "gpu_off": 840.584,
+      "improvement_percent": -15.335766562294797,
+      "faster": "CPU"
+    },
+    "subset_join": {
+      "gpu_on": 916.376,
+      "gpu_off": 2348.573,
+      "improvement_percent": 60.9815832848287,
+      "faster": "GPU"
+    },
+    "large_join": {
+      "gpu_on": 6366.995,
+      "gpu_off": 3245.228,
+      "improvement_percent": -96.1956139907581,
+      "faster": "CPU"
+    },
+    "simple_math": {
+      "gpu_on": 3457.392,
+      "gpu_off": 2171.618,
+      "improvement_percent": -59.208111187142485,
+      "faster": "CPU"
+    },
+    "complex_math": {
+      "gpu_on": 2674.451,
+      "gpu_off": 3172.334,
+      "improvement_percent": 15.694532795096602,
+      "faster": "GPU"
+    },
+    "simple_ops": {
+      "gpu_on": 750.307,
+      "gpu_off": 1544.269,
+      "improvement_percent": 51.41345193097835,
+      "faster": "GPU"
+    }
+  },
+  "system_info": {
+    "gpu_model": "NVIDIA GeForce RTX 3060",
+    "gpu_memory": "812MB",
+    "timestamp": "2025-07-10 13:57:05"
+  },
+  "detailed_analysis": {
+    "subset_join": {
+      "gpu_exec_count": 25000000,
+      "gpu_utilized": true
+    },
+    "simple_scan": {
+      "gpu_exec_count": 25000000,
+      "gpu_utilized": true
+    },
+    "simple_math": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    },
+    "large_join": {
+      "gpu_exec_count": 10000000,
+      "gpu_utilized": true
+    },
+    "complex_math": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    },
+    "simple_ops": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    }
+  }
+}

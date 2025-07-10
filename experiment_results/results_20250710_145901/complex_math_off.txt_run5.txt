@@ -1,0 +1,34 @@
+SET
+                                                                                                 QUERY PLAN                                                                                                  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=847402.31..847402.32 rows=1 width=24) (actual time=4105.798..4111.587 rows=1 loops=1)
+   Output: count(*), sum((sqrt((abs(val))::double precision) + log(((val + 2))::double precision))), avg(atan2((val)::double precision, ((id % 100))::double precision))
+   Buffers: shared hit=5632 read=215616
+   ->  Gather  (cost=847402.08..847402.29 rows=2 width=48) (actual time=4105.713..4111.580 rows=3 loops=1)
+         Output: (PARTIAL count(*)), (PARTIAL sum((sqrt((abs(val))::double precision) + log(((val + 2))::double precision)))), (PARTIAL avg(atan2((val)::double precision, ((id % 100))::double precision)))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=5632 read=215616
+         ->  Partial Aggregate  (cost=846402.08..846402.09 rows=1 width=48) (actual time=4100.096..4100.097 rows=1 loops=3)
+               Output: PARTIAL count(*), PARTIAL sum((sqrt((abs(val))::double precision) + log(((val + 2))::double precision))), PARTIAL avg(atan2((val)::double precision, ((id % 100))::double precision))
+               Buffers: shared hit=5632 read=215616
+               Worker 0:  actual time=4097.843..4097.844 rows=1 loops=1
+                 Buffers: shared hit=1910 read=72059
+               Worker 1:  actual time=4097.874..4097.875 rows=1 loops=1
+                 Buffers: shared hit=1872 read=71801
+               ->  Parallel Seq Scan on public.t_huge  (cost=0.00..481657.98 rows=10421260 width=8) (actual time=0.414..2866.817 rows=8332661 loops=3)
+                     Output: id, val
+                     Filter: (t_huge.val > 0)
+                     Rows Removed by Filter: 8334006
+                     Buffers: shared hit=5632 read=215616
+                     Worker 0:  actual time=0.455..2852.199 rows=8358221 loops=1
+                       Buffers: shared hit=1910 read=72059
+                     Worker 1:  actual time=0.529..2873.835 rows=8323045 loops=1
+                       Buffers: shared hit=1872 read=71801
+ Planning:
+   Buffers: shared hit=74
+ Planning Time: 2.780 ms
+ Execution Time: 4112.794 ms
+(28 rows)
+
+실행 시간: 4.668569820초

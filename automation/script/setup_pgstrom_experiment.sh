@@ -33,8 +33,12 @@ log_step() {
 # 설정 변수
 DOCKER_IMAGE="mypg16-rocky8:latest"
 CONTAINER_NAME="pgstrom-test"
-WORK_DIR="/home/jaesol/Projects/pgstrom"
-EXPERIMENT_DIR="$WORK_DIR/experiment_results"
+
+# 환경변수 설정
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+SCRIPT_DIR="$PROJECT_ROOT/automation/script"
+EXPERIMENT_DIR="$PROJECT_ROOT/experiment_results"
+WORK_DIR="$PROJECT_ROOT"
 
 # 시스템 요구사항 확인
 check_requirements() {
@@ -66,28 +70,36 @@ create_directories() {
     log_step "작업 디렉토리 생성 중..."
     
     mkdir -p "$EXPERIMENT_DIR"
-    mkdir -p "$WORK_DIR/scripts"
-    mkdir -p "$WORK_DIR/configs"
-    mkdir -p "$WORK_DIR/logs"
     
     log_info "디렉토리 생성 완료"
 }
 
 # Docker 이미지 빌드
+clone_pgstrom_docker() {
+    log_step "PG-Strom Docker 소스 준비 중..."
+    
+    # 프로젝트 루트로 이동
+    cd "$PROJECT_ROOT"
+    
+    # pg-strom-docker 클론 (이미 존재하지 않는 경우)
+    if [ ! -d "pg-strom-docker" ]; then
+        log_info "pg-strom-docker 클론 중..."
+        git clone https://github.com/ytooyama/pg-strom-docker.git
+    else
+        log_info "pg-strom-docker 디렉토리가 이미 존재합니다."
+    fi
+}
+
 build_docker_image() {
     log_step "Docker 이미지 빌드 중..."
     
     if [[ "$(docker images -q $DOCKER_IMAGE 2> /dev/null)" == "" ]]; then
         log_info "PG-Strom Docker 이미지 빌드 시작..."
         
-        # pg-strom-docker 클론 (이미 존재하지 않는 경우)
-        if [ ! -d "pg-strom-docker" ]; then
-            git clone https://github.com/ytooyama/pg-strom-docker.git
-        fi
-        
-        cd pg-strom-docker/docker
+        log_info "Docker 이미지 빌드 중... (약 5-10분 소요)"
+        cd "$PROJECT_ROOT/pg-strom-docker/docker"
         docker image build --compress -t $DOCKER_IMAGE -f Dockerfile .
-        cd "$WORK_DIR"
+        cd "$PROJECT_ROOT"
         
         log_info "Docker 이미지 빌드 완료"
     else
@@ -136,11 +148,12 @@ setup_postgresql() {
     "
     
     # PostgreSQL 시작
-    docker container exec $CONTAINER_NAME systemctl start postgresql
+    docker container exec $CONTAINER_NAME su - postgres -c "/usr/pgsql-16/bin/pg_ctl -D /var/lib/pgsql/16/data -l /var/lib/pgsql/16/data/postgresql.log start"
     
     # PG-Strom 로딩 확인
     sleep 5
-    docker container exec $CONTAINER_NAME journalctl -u postgresql -n 20 | grep -i "pg-strom"
+    docker container exec $CONTAINER_NAME su - postgres -c "psql -c 'SELECT version();'"
+    docker container exec $CONTAINER_NAME tail -20 /var/lib/pgsql/16/data/postgresql.log | grep -i "pg-strom" || echo "PG-Strom 로그 확인 중..."
     
     log_info "PostgreSQL 초기화 완료"
 }
@@ -148,22 +161,31 @@ setup_postgresql() {
 # 메인 실행 함수
 main() {
     log_info "PG-Strom 실험 환경 자동화 설정 시작"
-    log_info "작업 디렉토리: $WORK_DIR"
+    log_info "프로젝트 루트: $PROJECT_ROOT"
+    log_info "스크립트 위치: $SCRIPT_DIR"
+    log_info "실험 결과 디렉토리: $EXPERIMENT_DIR"
     
     check_requirements
     create_directories
+    clone_pgstrom_docker
     build_docker_image
     start_container
     setup_postgresql
     
     log_info "기본 설정 완료!"
-    log_info "다음 단계: ./run_experiments.sh 실행"
+    log_info "다음 단계: $SCRIPT_DIR/create_test_data.sh 실행"
     
     # 시스템 정보 수집
     log_step "시스템 정보 수집 중..."
     nvidia-smi > "$EXPERIMENT_DIR/system_info.txt"
     docker info >> "$EXPERIMENT_DIR/system_info.txt"
     uname -a >> "$EXPERIMENT_DIR/system_info.txt"
+    
+    # 자동화 스크립트들 실행 권한 부여
+    log_step "자동화 스크립트 권한 설정 중..."
+    chmod +x "$SCRIPT_DIR"/*.sh
+    chmod +x "$SCRIPT_DIR"/*.py
+    log_info "스크립트 권한 설정 완료"
     
     log_info "모든 설정이 완료되었습니다!"
 }

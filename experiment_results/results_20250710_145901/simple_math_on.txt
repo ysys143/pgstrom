@@ -1,0 +1,46 @@
+SET
+                                                                                            QUERY PLAN                                                                                            
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=106041.35..106041.36 rows=1 width=24) (actual time=3531.174..3531.382 rows=1 loops=1)
+   Output: pgstrom.fcount((pgstrom.nrows())), pgstrom.sum_fp64((pgstrom.psum(pow((val)::double precision, '2'::double precision)))), pgstrom.avg_fp((pgstrom.pavg(sin((val)::double precision))))
+   Buffers: shared hit=381
+   ->  Gather  (cost=106041.22..106041.33 rows=1 width=72) (actual time=3531.143..3531.360 rows=1 loops=1)
+         Output: (pgstrom.nrows()), (pgstrom.psum(pow((val)::double precision, '2'::double precision))), (pgstrom.pavg(sin((val)::double precision)))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=381
+         ->  Parallel Custom Scan (GpuPreAgg) on public.t_huge  (cost=105041.22..105041.23 rows=1 width=72) (actual time=3489.933..3489.937 rows=0 loops=3)
+               Output: (pgstrom.nrows()), (pgstrom.psum(pow((val)::double precision, '2'::double precision))), (pgstrom.pavg(sin((val)::double precision)))
+               GPU Projection: pgstrom.nrows(), pgstrom.psum(pow((t_huge.val)::double precision, '2'::double precision)), pgstrom.pavg(sin((t_huge.val)::double precision))
+               GPU Scan Quals: (t_huge.val > 0) [plan: 49998720 -> 10421260, exec: 50000000 -> 24997982]
+               GPU Group Key: 
+               Scan-Engine: VFS with GPU0; vfs=221239, ntuples=50000000
+               Buffers: shared hit=381
+               Worker 0:  actual time=3500.447..3500.450 rows=0 loops=1
+                 Buffers: shared hit=138
+               Worker 1:  actual time=3440.787..3440.791 rows=0 loops=1
+                 Buffers: shared hit=138
+ Planning:
+   Buffers: shared hit=322
+ Planning Time: 6.910 ms
+ Execution Time: 3532.565 ms
+(23 rows)
+
+실행 시간: 4.053026609초
+
+=== 8회 반복 실행 통계 ===
+평균 실행 시간: 3339.94ms
+최소 실행 시간: 3278.125ms
+최대 실행 시간: 3532.565ms
+표준편차: 75.2292ms
+분산: 5659.44ms²
+변동계수 (CV): 2.25%ms
+개별 실행 시간:
+3532.565
+3317.548
+3278.125
+3330.682
+3300.066
+3298.941
+3318.054
+3343.554

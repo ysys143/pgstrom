@@ -1,0 +1,137 @@
+{
+  "performance_results": {
+    "simple_scan": {
+      "gpu_on": 2389.155375,
+      "gpu_off": 2752.23675,
+      "gpu_on_std": 76.69682174793414,
+      "gpu_off_std": 17.818677018440507,
+      "gpu_on_var": 5882.402466234384,
+      "gpu_off_var": 317.5052506874999,
+      "gpu_on_cv": 3.2102065253053764,
+      "gpu_off_cv": 0.6474252993838742,
+      "gpu_on_min": 2351.138,
+      "gpu_on_max": 2591.157,
+      "gpu_off_min": 2731.943,
+      "gpu_off_max": 2784.105,
+      "improvement_percent": 13.192229011548523,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "subset_join": {
+      "gpu_on": 2563.992625,
+      "gpu_off": 3319.006125,
+      "gpu_on_std": 66.82297590637796,
+      "gpu_off_std": 8.236417037120892,
+      "gpu_on_var": 4465.310108984369,
+      "gpu_off_var": 67.83856560937531,
+      "gpu_on_cv": 2.6062078047661297,
+      "gpu_off_cv": 0.24815913942071716,
+      "gpu_on_min": 2508.764,
+      "gpu_on_max": 2735.205,
+      "gpu_off_min": 3306.668,
+      "gpu_off_max": 3329.63,
+      "improvement_percent": 22.74818037583465,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "large_join": {
+      "gpu_on": 2174.73125,
+      "gpu_off": 2512.94825,
+      "gpu_on_std": 44.80382236414104,
+      "gpu_off_std": 8.262036972653869,
+      "gpu_on_var": 2007.3824984375046,
+      "gpu_off_var": 68.2612549374995,
+      "gpu_on_cv": 2.060200420817103,
+      "gpu_off_cv": 0.3287786357181796,
+      "gpu_on_min": 2127.066,
+      "gpu_on_max": 2269.949,
+      "gpu_off_min": 2502.5,
+      "gpu_off_max": 2527.5,
+      "improvement_percent": 13.458971946596995,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "simple_math": {
+      "gpu_on": 3339.941875,
+      "gpu_off": 4044.526,
+      "gpu_on_std": 75.22924042458081,
+      "gpu_off_std": 10.893273773296938,
+      "gpu_on_var": 5659.438614859383,
+      "gpu_off_var": 118.6634134999989,
+      "gpu_on_cv": 2.252411665834179,
+      "gpu_off_cv": 0.26933375563161016,
+      "gpu_on_min": 3278.125,
+      "gpu_on_max": 3532.565,
+      "gpu_off_min": 4025.106,
+      "gpu_off_max": 4059.537,
+      "improvement_percent": 17.42068477245541,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "complex_math": {
+      "gpu_on": 4758.455,
+      "gpu_off": 4141.81225,
+      "gpu_on_std": 247.63587374510186,
+      "gpu_off_std": 48.734081197735726,
+      "gpu_on_var": 61323.525965500026,
+      "gpu_off_var": 2375.010670187499,
+      "gpu_on_cv": 5.204123475899254,
+      "gpu_off_cv": 1.176636657002879,
+      "gpu_on_min": 4121.079,
+      "gpu_on_max": 4991.034,
+      "gpu_off_min": 4093.385,
+      "gpu_off_max": 4265.116,
+      "improvement_percent": -14.8882352163597,
+      "faster": "CPU",
+      "runs_count": 8
+    },
+    "simple_ops": {
+      "gpu_on": 3333.076375,
+      "gpu_off": 3927.950625,
+      "gpu_on_std": 68.81258711699759,
+      "gpu_off_std": 43.2415659491463,
+      "gpu_on_var": 4735.172145734384,
+      "gpu_off_var": 1869.8330257343687,
+      "gpu_on_cv": 2.064536763487683,
+      "gpu_off_cv": 1.1008683682001807,
+      "gpu_on_min": 3278.787,
+      "gpu_on_max": 3511.186,
+      "gpu_off_min": 3896.674,
+      "gpu_off_max": 4038.298,
+      "improvement_percent": 15.144646834760046,
+      "faster": "GPU",
+      "runs_count": 8
+    }
+  },
+  "system_info": {
+    "gpu_model": "NVIDIA GeForce RTX 3060",
+    "gpu_memory": "795MB",
+    "timestamp": "2025-07-10 15:09:59"
+  },
+  "detailed_analysis": {
+    "subset_join": {
+      "gpu_exec_count": 25000000,
+      "gpu_utilized": true
+    },
+    "simple_scan": {
+      "gpu_exec_count": 25000000,
+      "gpu_utilized": true
+    },
+    "simple_math": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    },
+    "large_join": {
+      "gpu_exec_count": 10000000,
+      "gpu_utilized": true
+    },
+    "complex_math": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    },
+    "simple_ops": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    }
+  }
+}

@@ -26,6 +26,11 @@ log_warn() {
 # 설정 변수
 CONTAINER_NAME="pgstrom-test"
 
+# 환경변수 설정
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+SCRIPT_DIR="$PROJECT_ROOT/automation/script"
+EXPERIMENT_DIR="$PROJECT_ROOT/experiment_results"
+
 # 데이터베이스 생성 및 테스트 데이터 생성
 create_test_databases() {
     log_step "테스트 데이터베이스 생성 중..."
@@ -36,7 +41,15 @@ create_test_databases() {
         createdb testdb2
     "
     
-    log_info "데이터베이스 생성 완료"
+    log_step "PG-Strom 확장 설치 중..."
+    
+    # PG-Strom 확장 설치
+    docker container exec $CONTAINER_NAME su - postgres -c "
+        psql testdb -c 'CREATE EXTENSION IF NOT EXISTS pg_strom;'
+        psql testdb2 -c 'CREATE EXTENSION IF NOT EXISTS pg_strom;'
+    "
+    
+    log_info "데이터베이스 생성 및 PG-Strom 확장 설치 완료"
 }
 
 # 기본 테스트 데이터 생성 (2500만 행)
@@ -154,7 +167,7 @@ main() {
     show_table_info
     
     log_info "모든 테스트 데이터 생성 완료!"
-    log_info "다음 단계: ./run_experiments.sh 실행"
+    log_info "다음 단계: $SCRIPT_DIR/run_experiments.sh 실행"
 }
 
 # 스크립트 실행

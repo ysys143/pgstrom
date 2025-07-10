@@ -1,0 +1,42 @@
+=== PG-Strom 성능 분석 결과 (Shell 버전) ===
+
+테스트: complex_math
+  GPU 시간: 4121.079ms
+  CPU 시간: 4140.754ms
+  성능 향상: 0%
+  우수한 방식: GPU
+
+테스트: large_join
+  GPU 시간: 2269.949ms
+  CPU 시간: 2505.565ms
+  성능 향상: 0%
+  우수한 방식: GPU
+
+테스트: simple_math
+  GPU 시간: 3532.565ms
+  CPU 시간: 4037.711ms
+  성능 향상: 10.0%
+  우수한 방식: GPU
+
+테스트: simple_ops
+  GPU 시간: 3511.186ms
+  CPU 시간: 3910.801ms
+  성능 향상: 10.0%
+  우수한 방식: GPU
+
+테스트: simple_scan
+  GPU 시간: 2591.157ms
+  CPU 시간: 2779.817ms
+  성능 향상: 0%
+  우수한 방식: GPU
+
+테스트: subset_join
+  GPU 시간: 2735.205ms
+  CPU 시간: 3328.330ms
+  성능 향상: 10.0%
+  우수한 방식: GPU
+
+=== 요약 ===
+총 테스트 수: 6
+GPU 우위 테스트: 6
+CPU 우위 테스트: 0

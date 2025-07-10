@@ -1,0 +1,34 @@
+SET
+                                                                      QUERY PLAN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=612923.96..612923.97 rows=1 width=48) (actual time=3924.815..3930.704 rows=1 loops=1)
+   Output: count(*), sum((val * val)), avg((val + val))
+   Buffers: shared hit=6688 read=214560
+   ->  Gather  (cost=612923.73..612923.94 rows=2 width=48) (actual time=3924.733..3930.686 rows=3 loops=1)
+         Output: (PARTIAL count(*)), (PARTIAL sum((val * val))), (PARTIAL avg((val + val)))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=6688 read=214560
+         ->  Partial Aggregate  (cost=611923.73..611923.74 rows=1 width=48) (actual time=3917.474..3917.475 rows=1 loops=3)
+               Output: PARTIAL count(*), PARTIAL sum((val * val)), PARTIAL avg((val + val))
+               Buffers: shared hit=6688 read=214560
+               Worker 0:  actual time=3914.554..3914.554 rows=1 loops=1
+                 Buffers: shared hit=2176 read=71749
+               Worker 1:  actual time=3914.520..3914.521 rows=1 loops=1
+                 Buffers: shared hit=2282 read=71488
+               ->  Parallel Seq Scan on public.t_huge  (cost=0.00..481657.98 rows=10421260 width=4) (actual time=0.367..3392.098 rows=8332661 loops=3)
+                     Output: id, val
+                     Filter: (t_huge.val > 0)
+                     Rows Removed by Filter: 8334006
+                     Buffers: shared hit=6688 read=214560
+                     Worker 0:  actual time=0.360..3383.853 rows=8351563 loops=1
+                       Buffers: shared hit=2176 read=71749
+                     Worker 1:  actual time=0.286..3387.272 rows=8334622 loops=1
+                       Buffers: shared hit=2282 read=71488
+ Planning:
+   Buffers: shared hit=74
+ Planning Time: 3.001 ms
+ Execution Time: 3931.889 ms
+(28 rows)
+
+실행 시간: 4.492399376초

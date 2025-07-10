@@ -1,0 +1,29 @@
+SET
+                                                                        QUERY PLAN                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=71405.75..71405.76 rows=1 width=24) (actual time=2348.603..2350.560 rows=1 loops=1)
+   Output: pgstrom.sum_int((pgstrom.psum((id)::bigint))), pgstrom.avg_fp((pgstrom.pavg(ten))), pgstrom.fcount((pgstrom.nrows()))
+   Buffers: shared hit=279
+   ->  Gather  (cost=71405.63..71405.73 rows=1 width=72) (actual time=2348.511..2350.550 rows=1 loops=1)
+         Output: (pgstrom.psum((id)::bigint)), (pgstrom.pavg(ten)), (pgstrom.nrows())
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=279
+         ->  Parallel Custom Scan (GpuPreAgg) on public.t_test  (cost=70405.63..70405.63 rows=1 width=72) (actual time=2199.620..2199.622 rows=0 loops=3)
+               Output: (pgstrom.psum((id)::bigint)), (pgstrom.pavg(ten)), (pgstrom.nrows())
+               GPU Projection: pgstrom.psum((t_test.id)::bigint), pgstrom.pavg(t_test.ten), pgstrom.nrows()
+               GPU Scan Quals: (t_test.ten > '50'::double precision) [plan: 24995300 -> 5206803, exec: 25000000 -> 12499959]
+               GPU Group Key: 
+               Scan-Engine: VFS with GPU0; vfs=159236, ntuples=25000000
+               Buffers: shared hit=279
+               Worker 0:  actual time=2286.965..2286.967 rows=1 loops=1
+                 Buffers: shared hit=150
+               Worker 1:  actual time=2279.537..2279.541 rows=0 loops=1
+                 Buffers: shared hit=89
+ Planning:
+   Buffers: shared hit=372
+ Planning Time: 3.967 ms
+ Execution Time: 2351.138 ms
+(23 rows)
+
+실행 시간: 2.910388996초

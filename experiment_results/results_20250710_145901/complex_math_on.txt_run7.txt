@@ -1,0 +1,35 @@
+SET
+                                                                                                 QUERY PLAN                                                                                                  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=563599.90..563599.91 rows=1 width=24) (actual time=4989.970..4990.029 rows=1 loops=1)
+   Output: count(*), sum((sqrt((abs(val))::double precision) + log(((val + 2))::double precision))), avg(atan2((val)::double precision, ((id % 100))::double precision))
+   Buffers: shared hit=22
+   ->  Gather  (cost=563599.67..563599.88 rows=2 width=48) (actual time=4989.960..4990.022 rows=3 loops=1)
+         Output: (PARTIAL count(*)), (PARTIAL sum((sqrt((abs(val))::double precision) + log(((val + 2))::double precision)))), (PARTIAL avg(atan2((val)::double precision, ((id % 100))::double precision)))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=22
+         ->  Partial Aggregate  (cost=562599.67..562599.68 rows=1 width=48) (actual time=4272.107..4272.109 rows=1 loops=3)
+               Output: PARTIAL count(*), PARTIAL sum((sqrt((abs(val))::double precision) + log(((val + 2))::double precision))), PARTIAL avg(atan2((val)::double precision, ((id % 100))::double precision))
+               Buffers: shared hit=22
+               Worker 0:  actual time=3856.394..3856.396 rows=1 loops=1
+                 Buffers: shared hit=13
+               Worker 1:  actual time=3971.528..3971.530 rows=1 loops=1
+                 Buffers: shared hit=4
+               ->  Parallel Custom Scan (GpuScan) on public.t_huge  (cost=100.00..197855.57 rows=10421260 width=8) (actual time=2001.549..2980.246 rows=8332661 loops=3)
+                     Output: val, id
+                     GPU Projection: t_huge.val, t_huge.id
+                     GPU Scan Quals: (t_huge.val > 0) [plan: 49998720 -> 10421260, exec: 50000000 -> 24997982]
+                     Scan-Engine: VFS with GPU0; vfs=221239, ntuples=50000000
+                     Buffers: shared hit=22
+                     Worker 0:  actual time=2133.179..3142.381 rows=4788122 loops=1
+                       Buffers: shared hit=13
+                     Worker 1:  actual time=2143.910..3163.961 rows=5547371 loops=1
+                       Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=330
+ Planning Time: 3.694 ms
+ Execution Time: 4991.034 ms
+(29 rows)
+
+실행 시간: 5.535619932초

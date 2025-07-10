@@ -1,0 +1,46 @@
+SET
+                                                                         QUERY PLAN                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=106041.35..106041.36 rows=1 width=48) (actual time=3502.700..3509.581 rows=1 loops=1)
+   Output: pgstrom.fcount((pgstrom.nrows())), pgstrom.sum_int((pgstrom.psum(((val * val))::bigint))), pgstrom.avg_int((pgstrom.pavg(((val + val))::bigint)))
+   Buffers: shared hit=243
+   ->  Gather  (cost=106041.22..106041.33 rows=1 width=72) (actual time=3502.286..3509.516 rows=1 loops=1)
+         Output: (pgstrom.nrows()), (pgstrom.psum(((val * val))::bigint)), (pgstrom.pavg(((val + val))::bigint))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=243
+         ->  Parallel Custom Scan (GpuPreAgg) on public.t_huge  (cost=105041.22..105041.23 rows=1 width=72) (actual time=3478.381..3478.386 rows=0 loops=3)
+               Output: (pgstrom.nrows()), (pgstrom.psum(((val * val))::bigint)), (pgstrom.pavg(((val + val))::bigint))
+               GPU Projection: pgstrom.nrows(), pgstrom.psum(((t_huge.val * t_huge.val))::bigint), pgstrom.pavg(((t_huge.val + t_huge.val))::bigint)
+               GPU Scan Quals: (t_huge.val > 0) [plan: 49998720 -> 10421260, exec: 50000000 -> 24997982]
+               GPU Group Key: 
+               Scan-Engine: VFS with GPU0; vfs=221239, ntuples=50000000
+               Buffers: shared hit=243
+               Worker 0:  actual time=3489.578..3489.583 rows=1 loops=1
+                 Buffers: shared hit=104
+               Worker 1:  actual time=3458.266..3458.271 rows=0 loops=1
+                 Buffers: shared hit=96
+ Planning:
+   Buffers: shared hit=338
+ Planning Time: 6.330 ms
+ Execution Time: 3511.186 ms
+(23 rows)
+
+실행 시간: 4.077822796초
+
+=== 8회 반복 실행 통계 ===
+평균 실행 시간: 3333.08ms
+최소 실행 시간: 3278.787ms
+최대 실행 시간: 3511.186ms
+표준편차: 68.8126ms
+분산: 4735.17ms²
+변동계수 (CV): 2.06%ms
+개별 실행 시간:
+3511.186
+3307.880
+3318.336
+3278.787
+3305.268
+3295.545
+3325.389
+3322.220

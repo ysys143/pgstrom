@@ -1,0 +1,13 @@
+test_name,gpu_enabled,execution_time_ms
+simple_scan,on,969.494
+simple_scan,off,840.584
+subset_join,on,916.376
+subset_join,off,2348.573
+large_join,on,6366.995
+large_join,off,3245.228
+simple_math,on,3457.392
+simple_math,off,2171.618
+complex_math,on,2674.451
+complex_math,off,3172.334
+simple_ops,on,750.307
+simple_ops,off,1544.269

@@ -1,0 +1,46 @@
+SET
+                                                                        QUERY PLAN                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=71405.75..71405.76 rows=1 width=24) (actual time=2583.073..2590.127 rows=1 loops=1)
+   Output: pgstrom.sum_int((pgstrom.psum((id)::bigint))), pgstrom.avg_fp((pgstrom.pavg(ten))), pgstrom.fcount((pgstrom.nrows()))
+   Buffers: shared hit=287
+   ->  Gather  (cost=71405.63..71405.73 rows=1 width=72) (actual time=2582.770..2590.103 rows=1 loops=1)
+         Output: (pgstrom.psum((id)::bigint)), (pgstrom.pavg(ten)), (pgstrom.nrows())
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=287
+         ->  Parallel Custom Scan (GpuPreAgg) on public.t_test  (cost=70405.63..70405.63 rows=1 width=72) (actual time=2517.287..2517.291 rows=0 loops=3)
+               Output: (pgstrom.psum((id)::bigint)), (pgstrom.pavg(ten)), (pgstrom.nrows())
+               GPU Projection: pgstrom.psum((t_test.id)::bigint), pgstrom.pavg(t_test.ten), pgstrom.nrows()
+               GPU Scan Quals: (t_test.ten > '50'::double precision) [plan: 24995300 -> 5206803, exec: 25000000 -> 12499959]
+               GPU Group Key: 
+               Scan-Engine: VFS with GPU0; vfs=159236, ntuples=25000000
+               Buffers: shared hit=287
+               Worker 0:  actual time=2566.089..2566.095 rows=1 loops=1
+                 Buffers: shared hit=93
+               Worker 1:  actual time=2549.019..2549.023 rows=0 loops=1
+                 Buffers: shared hit=94
+ Planning:
+   Buffers: shared hit=372
+ Planning Time: 5.765 ms
+ Execution Time: 2591.157 ms
+(23 rows)
+
+실행 시간: 3.148500911초
+
+=== 8회 반복 실행 통계 ===
+평균 실행 시간: 2389.16ms
+최소 실행 시간: 2351.138ms
+최대 실행 시간: 2591.157ms
+표준편차: 76.6968ms
+분산: 5882.4ms²
+변동계수 (CV): 3.21%ms
+개별 실행 시간:
+2591.157
+2356.753
+2356.243
+2373.647
+2370.388
+2351.138
+2354.711
+2359.206

@@ -1,0 +1,33 @@
+PG-Strom 실험 결과 요약 (2025-07-10 13:57:05)
+==================================================
+
+Simple Scan:
+  GPU ON:  969.5ms
+  GPU OFF: 840.6ms
+  성능 향상: -15.3% (CPU 우수)
+
+Subset Join:
+  GPU ON:  916.4ms
+  GPU OFF: 2348.6ms
+  성능 향상: 61.0% (GPU 우수)
+
+Large Join:
+  GPU ON:  6367.0ms
+  GPU OFF: 3245.2ms
+  성능 향상: -96.2% (CPU 우수)
+
+Simple Math:
+  GPU ON:  3457.4ms
+  GPU OFF: 2171.6ms
+  성능 향상: -59.2% (CPU 우수)
+
+Complex Math:
+  GPU ON:  2674.5ms
+  GPU OFF: 3172.3ms
+  성능 향상: 15.7% (GPU 우수)
+
+Simple Ops:
+  GPU ON:  750.3ms
+  GPU OFF: 1544.3ms
+  성능 향상: 51.4% (GPU 우수)
+
