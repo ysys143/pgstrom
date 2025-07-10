@@ -149,9 +149,6 @@ cd automation/script
 - **PG-Strom 공식 문서**: https://heterodb.github.io/pg-strom/
 - **참고 Docker 환경**: https://github.com/ytooyama/pg-strom-docker
 
-## 👥 기여자
-
-- **재솔님**: 프로젝트 리더, 성능 분석 및 테스트 설계
 
 ---
 
