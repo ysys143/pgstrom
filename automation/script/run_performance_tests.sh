@@ -235,9 +235,13 @@ collect_system_info() {
         echo "=== 실험 실행 정보 ==="
         echo "날짜: $(date)"
         echo "실헑 ID: $TIMESTAMP"
+        echo "CUDA 버전: $(nvidia-smi | grep "CUDA Version" | awk '{print $9}')"
+        echo "GPU 개수: $(nvidia-smi -L | wc -l)"
         echo ""
         
         echo "=== GPU 정보 ==="
+        nvidia-smi -L
+        echo ""
         docker container exec $CONTAINER_NAME nvidia-smi
         echo ""
         

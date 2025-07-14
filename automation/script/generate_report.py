@@ -104,22 +104,47 @@ class PGStromReportGenerator:
             with open(system_file, 'r') as f:
                 content = f.read()
                 
-            # GPU 정보 추출
-            gpu_match = re.search(r'NVIDIA GeForce RTX \d+', content)
+            # CUDA 버전 추출 (12.9 지원)
+            cuda_match = re.search(r'CUDA 버전: ([\d.]+)', content)
+            if not cuda_match:
+                cuda_match = re.search(r'CUDA Version: ([\d.]+)', content)
+            cuda_version = cuda_match.group(1) if cuda_match else "Unknown"
+            
+            # GPU 모델 추출 (L40S 지원)
+            gpu_match = re.search(r'NVIDIA (L40S|GeForce RTX \d+|A\d+|H\d+)', content)
             gpu_model = gpu_match.group(0) if gpu_match else "NVIDIA GPU"
             
-            # 메모리 정보 추출
+            # GPU 개수 추출
+            gpu_count_match = re.search(r'GPU 개수: (\d+)', content)
+            gpu_count = gpu_count_match.group(1) if gpu_count_match else "1"
+            
+            # 메모리 정보 추출 (46GB L40S 지원)
             memory_match = re.search(r'(\d+)MiB', content)
-            gpu_memory = memory_match.group(1) + "MB" if memory_match else "Unknown"
+            if memory_match:
+                memory_mb = int(memory_match.group(1))
+                gpu_memory = f"{memory_mb}MB"
+                if memory_mb > 40000:  # 40GB 이상이면 GB 단위로 표시
+                    gpu_memory = f"{memory_mb//1024}GB"
+            else:
+                gpu_memory = "Unknown"
             
             self.report_data['system_info'] = {
+                'cuda_version': cuda_version,
                 'gpu_model': gpu_model,
+                'gpu_count': gpu_count,
                 'gpu_memory': gpu_memory,
                 'timestamp': self.timestamp
             }
             
         except Exception as e:
             print(f"[WARN] 시스템 정보 추출 중 오류: {e}")
+            self.report_data['system_info'] = {
+                'cuda_version': 'Unknown',
+                'gpu_model': 'NVIDIA GPU',
+                'gpu_count': '1',
+                'gpu_memory': 'Unknown',
+                'timestamp': self.timestamp
+            }
     
     def analyze_detailed_results(self):
         """상세 실험 결과 분석"""
@@ -156,12 +181,14 @@ class PGStromReportGenerator:
         system_info = self.report_data.get('system_info', {})
         gpu_model = system_info.get('gpu_model', 'NVIDIA GPU')
         gpu_memory = system_info.get('gpu_memory', 'Unknown')
+        gpu_count = system_info.get('gpu_count', '1')
+        cuda_version = system_info.get('cuda_version', 'Unknown')
         
         report_content = f"""# PG-Strom GPU 가속 성능 분석 보고서
 
 **작성자**: 신재솔  
 **작성일**: {self.timestamp}  
-**실험 환경**: {gpu_model}
+**실험 환경**: {gpu_model} x{gpu_count} (CUDA {cuda_version})
 
 ## 1. 실험 개요
 
@@ -173,8 +200,9 @@ class PGStromReportGenerator:
 - 평균, 표준편차, 분산, 변동계수 산출
 
 ### 실험 환경
-- GPU: {gpu_model}
-- GPU 메모리: {gpu_memory}
+- GPU: {gpu_model} x{gpu_count}
+- GPU 메모리: {gpu_memory} (per GPU)
+- CUDA 버전: {cuda_version}
 - 실험 일시: {self.timestamp}
 
 ## 2. 실험 결과

@@ -50,6 +50,23 @@ check_requirements() {
         exit 1
     fi
     
+    # CUDA 버전 확인
+    local cuda_version=$(nvidia-smi | grep "CUDA Version" | awk '{print $9}')
+    log_info "감지된 CUDA 버전: $cuda_version"
+    
+    # CUDA 12.9 특별 처리
+    if [[ "$cuda_version" == "12.9" ]]; then
+        log_info "CUDA 12.9 환경이 감지되었습니다."
+        log_info "CUDA 12.9.1 Rocky Linux 8 이미지를 사용합니다."
+        
+        # CUDA 12.9.1 이미지 사용 가능 여부 확인
+        if docker manifest inspect nvidia/cuda:12.9.1-devel-rockylinux8 &>/dev/null; then
+            log_info "CUDA 12.9.1 Rocky Linux 8 이미지 사용 가능 확인됨"
+        else
+            log_warn "CUDA 12.9.1 이미지를 가져올 수 없습니다. 네트워크 연결을 확인하세요."
+        fi
+    fi
+    
     # Docker 확인
     if ! command -v docker &> /dev/null; then
         log_error "Docker가 설치되지 않았습니다."
@@ -93,13 +110,54 @@ clone_pgstrom_docker() {
 build_docker_image() {
     log_step "Docker 이미지 빌드 중..."
     
+    # CUDA 버전 확인
+    local cuda_version=$(nvidia-smi | grep "CUDA Version" | awk '{print $9}')
+    
     if [[ "$(docker images -q $DOCKER_IMAGE 2> /dev/null)" == "" ]]; then
         log_info "PG-Strom Docker 이미지 빌드 시작..."
         
-        log_info "Docker 이미지 빌드 중... (약 5-10분 소요)"
-        cd "$PROJECT_ROOT/pg-strom-docker/docker"
-        docker image build --compress -t $DOCKER_IMAGE -f Dockerfile .
-        cd "$PROJECT_ROOT"
+        # CUDA 12.9 환경에서는 호환되는 베이스 이미지 사용
+        if [[ "$cuda_version" == "12.9" ]]; then
+            log_info "CUDA 12.9 환경을 위한 Docker 이미지 빌드 중..."
+            log_info "베이스 이미지: nvidia/cuda:12.9.1-devel-rockylinux8"
+            
+            # 임시 Dockerfile 생성 (CUDA 12.9.1 기반)
+            cat > "$PROJECT_ROOT/Dockerfile.cuda129" << 'EOF'
+FROM nvidia/cuda:12.9.1-devel-rockylinux8
+
+# PostgreSQL 16 및 PG-Strom 설치
+RUN dnf -y update && \
+    dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    dnf -y install postgresql16-server postgresql16-devel && \
+    dnf -y install https://github.com/heterodb/pg-strom/releases/download/v6.0.2/pg_strom-PG16-6.0.2-1.el8.x86_64.rpm
+
+# 환경 설정
+ENV PATH /usr/pgsql-16/bin:$PATH
+ENV PGDATA /var/lib/pgsql/16/data
+EXPOSE 5432
+
+# PostgreSQL 사용자 생성
+RUN useradd -m postgres
+
+# 작업 디렉토리 설정
+WORKDIR /home/postgres
+
+# 기본 명령어
+CMD ["/bin/bash"]
+EOF
+            
+            # CUDA 12.9.1 기반 이미지 빌드
+            docker image build --compress -t $DOCKER_IMAGE -f "$PROJECT_ROOT/Dockerfile.cuda129" "$PROJECT_ROOT"
+            
+            # 임시 Dockerfile 삭제
+            rm -f "$PROJECT_ROOT/Dockerfile.cuda129"
+            
+        else
+            log_info "기존 pg-strom-docker 이미지 빌드 중... (약 5-10분 소요)"
+            cd "$PROJECT_ROOT/pg-strom-docker/docker"
+            docker image build --compress -t $DOCKER_IMAGE -f Dockerfile .
+            cd "$PROJECT_ROOT"
+        fi
         
         log_info "Docker 이미지 빌드 완료"
     else
@@ -177,9 +235,22 @@ main() {
     
     # 시스템 정보 수집
     log_step "시스템 정보 수집 중..."
-    nvidia-smi > "$EXPERIMENT_DIR/system_info.txt"
-    docker info >> "$EXPERIMENT_DIR/system_info.txt"
-    uname -a >> "$EXPERIMENT_DIR/system_info.txt"
+    {
+        echo "=== CUDA 12.9 환경 정보 ==="
+        echo "CUDA 버전: $(nvidia-smi | grep "CUDA Version" | awk '{print $9}')"
+        echo "GPU 개수: $(nvidia-smi -L | wc -l)"
+        echo "GPU 모델:"
+        nvidia-smi -L
+        echo ""
+        echo "=== 전체 시스템 정보 ==="
+        nvidia-smi
+        echo ""
+        echo "=== Docker 정보 ==="
+        docker info
+        echo ""
+        echo "=== 시스템 정보 ==="
+        uname -a
+    } > "$EXPERIMENT_DIR/system_info.txt"
     
     # 자동화 스크립트들 실행 권한 부여
     log_step "자동화 스크립트 권한 설정 중..."
