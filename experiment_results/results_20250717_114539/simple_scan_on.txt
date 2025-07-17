@@ -1,0 +1,46 @@
+SET
+                                                                       QUERY PLAN                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=71386.08..71386.09 rows=1 width=24) (actual time=529.528..529.597 rows=1 loops=1)
+   Output: pgstrom.sum_int((pgstrom.psum((id)::bigint))), pgstrom.avg_fp((pgstrom.pavg(ten))), pgstrom.fcount((pgstrom.nrows()))
+   Buffers: shared hit=2428 read=59916
+   ->  Gather  (cost=71385.96..71386.06 rows=1 width=72) (actual time=529.512..529.584 rows=1 loops=1)
+         Output: (pgstrom.psum((id)::bigint)), (pgstrom.pavg(ten)), (pgstrom.nrows())
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=2428 read=59916
+         ->  Parallel Custom Scan (GpuPreAgg) on public.t_test  (cost=70385.96..70385.96 rows=1 width=72) (actual time=520.038..520.041 rows=0 loops=3)
+               Output: (pgstrom.psum((id)::bigint)), (pgstrom.pavg(ten)), (pgstrom.nrows())
+               GPU Projection: pgstrom.psum((t_test.id)::bigint), pgstrom.pavg(t_test.ten), pgstrom.nrows()
+               GPU Scan Quals: (t_test.ten > '50'::double precision) [plan: 25001140 -> 5175078, exec: 25000000 -> 12505306]
+               GPU Group Key: 
+               Scan-Engine: VFS with GPU0; buffer=62064, vfs=97172, ntuples=25000000
+               Buffers: shared hit=2428 read=59916
+               Worker 0:  actual time=524.667..524.669 rows=0 loops=1
+                 Buffers: shared hit=91 read=24561
+               Worker 1:  actual time=506.174..506.177 rows=0 loops=1
+                 Buffers: shared hit=90 read=16374
+ Planning:
+   Buffers: shared hit=372 dirtied=1
+ Planning Time: 0.739 ms
+ Execution Time: 530.164 ms
+(23 rows)
+
+실행 시간: .734412519초
+
+=== 8회 반복 실행 통계 ===
+평균 실행 시간: 251.829ms
+최소 실행 시간: 131.351ms
+최대 실행 시간: 530.164ms
+표준편차: 120.586ms
+분산: 14541.1ms²
+변동계수 (CV): 47.88%ms
+개별 실행 시간:
+530.164
+338.423
+241.380
+216.967
+223.593
+174.076
+158.676
+131.351

@@ -1,0 +1,11 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0  19576  3584 pts/0    Ss+  02:32   0:00 /bin/bash
+postgres     228  0.0  0.0 5084404 155308 ?      Ss   02:32   0:01 /usr/pgsql-16/bin/postgres -D /var/lib/pgsql/16/data
+postgres     231  0.0  0.0 241452  6760 ?        Ss   02:32   0:00 postgres: logger 
+postgres   15880  0.0  0.0 5084540 39424 ?       Ss   04:44   0:00 postgres: checkpointer 
+postgres   15881  0.0  0.0 5084580 37888 ?       Ss   04:44   0:00 postgres: background writer 
+postgres   15882  0.0  0.0 5084404 20992 ?       Ss   04:44   0:00 postgres: walwriter 
+postgres   15883  0.0  0.0 5086036 7168 ?        Ss   04:44   0:00 postgres: autovacuum launcher 
+postgres   15885  0.0  0.0 5086072 6656 ?        Ss   04:44   0:00 postgres: logical replication launcher 
+postgres   15890  0.0  0.0 20271800 159488 ?     Ssl  04:44   0:00 postgres: PG-Strom GPU Service 
+root       15918  0.0  0.0  44784  3072 ?        Rs   05:00   0:00 ps aux

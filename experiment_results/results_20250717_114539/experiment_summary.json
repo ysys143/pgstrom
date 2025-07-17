@@ -1,0 +1,139 @@
+{
+  "performance_results": {
+    "simple_scan": {
+      "gpu_on": 251.82875,
+      "gpu_off": 673.8908749999999,
+      "gpu_on_std": 120.58641315644769,
+      "gpu_off_std": 4.480697558346796,
+      "gpu_on_var": 14541.0830379375,
+      "gpu_off_var": 20.076650609374937,
+      "gpu_on_cv": 47.88429166902019,
+      "gpu_off_cv": 0.6648995741850334,
+      "gpu_on_min": 131.351,
+      "gpu_on_max": 530.164,
+      "gpu_off_min": 670.583,
+      "gpu_off_max": 685.448,
+      "improvement_percent": 62.63063363189181,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "subset_join": {
+      "gpu_on": 246.021875,
+      "gpu_off": 2350.0771250000003,
+      "gpu_on_std": 5.923690096500241,
+      "gpu_off_std": 30.68892119901538,
+      "gpu_on_var": 35.09010435937503,
+      "gpu_off_var": 941.8098843593756,
+      "gpu_on_cv": 2.4077899969261845,
+      "gpu_off_cv": 1.3058686828848385,
+      "gpu_on_min": 237.268,
+      "gpu_on_max": 257.978,
+      "gpu_off_min": 2313.469,
+      "gpu_off_max": 2400.771,
+      "improvement_percent": 89.53132761547134,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "large_join": {
+      "gpu_on": 1262.38525,
+      "gpu_off": 2907.5818750000003,
+      "gpu_on_std": 107.27452007437508,
+      "gpu_off_std": 48.400520871261044,
+      "gpu_on_var": 11507.822657187502,
+      "gpu_off_var": 2342.610420609376,
+      "gpu_on_cv": 8.497764060089825,
+      "gpu_off_cv": 1.6646313999760038,
+      "gpu_on_min": 1184.459,
+      "gpu_on_max": 1541.411,
+      "gpu_off_min": 2846.364,
+      "gpu_off_max": 2999.768,
+      "improvement_percent": 56.58298530286443,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "simple_math": {
+      "gpu_on": 182.613,
+      "gpu_off": 1459.0055,
+      "gpu_on_std": 60.844774574321505,
+      "gpu_off_std": 2.653897040203339,
+      "gpu_on_var": 3702.086593000001,
+      "gpu_off_var": 7.043169500000043,
+      "gpu_on_cv": 33.31897212921397,
+      "gpu_off_cv": 0.1818976720926233,
+      "gpu_on_min": 152.949,
+      "gpu_on_max": 343.302,
+      "gpu_off_min": 1453.568,
+      "gpu_off_max": 1462.56,
+      "improvement_percent": 87.48373463979402,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "complex_math": {
+      "gpu_on": 1506.325125,
+      "gpu_off": 1771.334,
+      "gpu_on_std": 84.74852600257644,
+      "gpu_off_std": 9.488315485374626,
+      "gpu_on_var": 7182.312659609376,
+      "gpu_off_var": 90.02813074999992,
+      "gpu_on_cv": 5.626177549323984,
+      "gpu_off_cv": 0.535659310179482,
+      "gpu_on_min": 1392.385,
+      "gpu_on_max": 1620.178,
+      "gpu_off_min": 1760.76,
+      "gpu_off_max": 1785.007,
+      "improvement_percent": 14.960977150554328,
+      "faster": "GPU",
+      "runs_count": 8
+    },
+    "simple_ops": {
+      "gpu_on": 160.07575000000003,
+      "gpu_off": 1242.5317499999999,
+      "gpu_on_std": 2.2934805836326606,
+      "gpu_off_std": 5.992597303131608,
+      "gpu_on_var": 5.260053187500009,
+      "gpu_off_var": 35.91122243750022,
+      "gpu_on_cv": 1.4327470485895961,
+      "gpu_off_cv": 0.48228926972140623,
+      "gpu_on_min": 156.156,
+      "gpu_on_max": 162.989,
+      "gpu_off_min": 1233.09,
+      "gpu_off_max": 1248.622,
+      "improvement_percent": 87.11696904324577,
+      "faster": "GPU",
+      "runs_count": 8
+    }
+  },
+  "system_info": {
+    "cuda_version": "12.9",
+    "gpu_model": "NVIDIA L40S",
+    "gpu_count": "3",
+    "gpu_memory": "1487MB",
+    "timestamp": "2025-07-17 11:52:03"
+  },
+  "detailed_analysis": {
+    "simple_scan": {
+      "gpu_exec_count": 25000000,
+      "gpu_utilized": true
+    },
+    "subset_join": {
+      "gpu_exec_count": 25000000,
+      "gpu_utilized": true
+    },
+    "large_join": {
+      "gpu_exec_count": 10000000,
+      "gpu_utilized": true
+    },
+    "simple_math": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    },
+    "complex_math": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    },
+    "simple_ops": {
+      "gpu_exec_count": 50000000,
+      "gpu_utilized": true
+    }
+  }
+}

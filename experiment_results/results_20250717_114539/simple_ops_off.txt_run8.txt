@@ -1,0 +1,34 @@
+SET
+                                                                      QUERY PLAN                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=612689.58..612689.59 rows=1 width=48) (actual time=1237.499..1239.656 rows=1 loops=1)
+   Output: count(*), sum((val * val)), avg((val + val))
+   Buffers: shared hit=4384 read=216864
+   ->  Gather  (cost=612689.35..612689.56 rows=2 width=48) (actual time=1237.373..1239.642 rows=3 loops=1)
+         Output: (PARTIAL count(*)), (PARTIAL sum((val * val))), (PARTIAL avg((val + val)))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=4384 read=216864
+         ->  Partial Aggregate  (cost=611689.35..611689.36 rows=1 width=48) (actual time=1235.077..1235.078 rows=1 loops=3)
+               Output: PARTIAL count(*), PARTIAL sum((val * val)), PARTIAL avg((val + val))
+               Buffers: shared hit=4384 read=216864
+               Worker 0:  actual time=1233.699..1233.701 rows=1 loops=1
+                 Buffers: shared hit=1752 read=71505
+               Worker 1:  actual time=1234.356..1234.356 rows=1 loops=1
+                 Buffers: shared hit=1322 read=72544
+               ->  Parallel Seq Scan on public.t_huge  (cost=0.00..481657.98 rows=10402510 width=4) (actual time=0.040..859.626 rows=8333799 loops=3)
+                     Output: id, val
+                     Filter: (t_huge.val > 0)
+                     Rows Removed by Filter: 8332867
+                     Buffers: shared hit=4384 read=216864
+                     Worker 0:  actual time=0.042..859.450 rows=8279136 loops=1
+                       Buffers: shared hit=1752 read=71505
+                     Worker 1:  actual time=0.036..858.400 rows=8347870 loops=1
+                       Buffers: shared hit=1322 read=72544
+ Planning:
+   Buffers: shared hit=74
+ Planning Time: 0.349 ms
+ Execution Time: 1239.721 ms
+(28 rows)
+
+실행 시간: 1.386560221초

@@ -1,0 +1,34 @@
+SET
+                                                                      QUERY PLAN                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=329315.88..329315.89 rows=1 width=24) (actual time=671.774..674.068 rows=1 loops=1)
+   Output: sum(id), avg(ten), count(*)
+   Buffers: shared hit=3192 read=156104
+   ->  Gather  (cost=329315.66..329315.87 rows=2 width=48) (actual time=671.658..674.058 rows=3 loops=1)
+         Output: (PARTIAL sum(id)), (PARTIAL avg(ten)), (PARTIAL count(*))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=3192 read=156104
+         ->  Partial Aggregate  (cost=328315.66..328315.67 rows=1 width=48) (actual time=668.720..668.721 rows=1 loops=3)
+               Output: PARTIAL sum(id), PARTIAL avg(ten), PARTIAL count(*)
+               Buffers: shared hit=3192 read=156104
+               Worker 0:  actual time=667.156..667.157 rows=1 loops=1
+                 Buffers: shared hit=1082 read=52628
+               Worker 1:  actual time=667.564..667.565 rows=1 loops=1
+                 Buffers: shared hit=958 read=50118
+               ->  Parallel Seq Scan on public.t_test  (cost=0.00..289504.33 rows=5174843 width=12) (actual time=0.040..477.129 rows=4168435 loops=3)
+                     Output: id, ten, twenty
+                     Filter: (t_test.ten > '50'::double precision)
+                     Rows Removed by Filter: 4164898
+                     Buffers: shared hit=3192 read=156104
+                     Worker 0:  actual time=0.039..472.951 rows=4215952 loops=1
+                       Buffers: shared hit=1082 read=52628
+                     Worker 1:  actual time=0.045..482.586 rows=4008146 loops=1
+                       Buffers: shared hit=958 read=50118
+ Planning:
+   Buffers: shared hit=86
+ Planning Time: 0.369 ms
+ Execution Time: 674.127 ms
+(28 rows)
+
+실행 시간: .850802286초

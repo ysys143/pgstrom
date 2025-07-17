@@ -1,0 +1,51 @@
+SET
+                                                                      QUERY PLAN                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=329323.56..329323.57 rows=1 width=24) (actual time=683.212..685.388 rows=1 loops=1)
+   Output: sum(id), avg(ten), count(*)
+   Buffers: shared hit=2971 read=156325
+   ->  Gather  (cost=329323.34..329323.55 rows=2 width=48) (actual time=683.093..685.377 rows=3 loops=1)
+         Output: (PARTIAL sum(id)), (PARTIAL avg(ten)), (PARTIAL count(*))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=2971 read=156325
+         ->  Partial Aggregate  (cost=328323.34..328323.35 rows=1 width=48) (actual time=680.885..680.886 rows=1 loops=3)
+               Output: PARTIAL sum(id), PARTIAL avg(ten), PARTIAL count(*)
+               Buffers: shared hit=2971 read=156325
+               Worker 0:  actual time=679.606..679.607 rows=1 loops=1
+                 Buffers: shared hit=1030 read=50278
+               Worker 1:  actual time=680.165..680.166 rows=1 loops=1
+                 Buffers: shared hit=1037 read=52877
+               ->  Parallel Seq Scan on public.t_test  (cost=0.00..289510.25 rows=5175078 width=12) (actual time=0.038..489.075 rows=4168435 loops=3)
+                     Output: id, ten, twenty
+                     Filter: (t_test.ten > '50'::double precision)
+                     Rows Removed by Filter: 4164898
+                     Buffers: shared hit=2971 read=156325
+                     Worker 0:  actual time=0.045..494.042 rows=4026640 loops=1
+                       Buffers: shared hit=1030 read=50278
+                     Worker 1:  actual time=0.032..485.454 rows=4234085 loops=1
+                       Buffers: shared hit=1037 read=52877
+ Planning:
+   Buffers: shared hit=86
+ Planning Time: 0.368 ms
+ Execution Time: 685.448 ms
+(28 rows)
+
+실행 시간: .835490230초
+
+=== 8회 반복 실행 통계 ===
+평균 실행 시간: 673.891ms
+최소 실행 시간: 670.583ms
+최대 실행 시간: 685.448ms
+표준편차: 4.4807ms
+분산: 20.0767ms²
+변동계수 (CV): 0.66%ms
+개별 실행 시간:
+685.448
+672.899
+674.127
+671.561
+672.223
+671.533
+672.753
+670.583

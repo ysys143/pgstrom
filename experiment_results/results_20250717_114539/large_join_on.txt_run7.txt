@@ -1,0 +1,39 @@
+SET
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=260751.51..260751.52 rows=1 width=40) (actual time=1189.760..1197.825 rows=1 loops=1)
+   Output: pgstrom.fcount((pgstrom.nrows())), pgstrom.avg_int((pgstrom.pavg(((a.val + b.val))::bigint)))
+   Buffers: shared hit=88793
+   ->  Gather  (cost=260751.39..260751.50 rows=1 width=40) (actual time=1184.954..1197.806 rows=1 loops=1)
+         Output: (pgstrom.nrows()), (pgstrom.pavg(((a.val + b.val))::bigint))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=88793
+         ->  Parallel Custom Scan (GpuPreAgg) on public.t_large2 b  (cost=259751.39..259751.40 rows=1 width=40) (actual time=1173.264..1173.268 rows=0 loops=3)
+               Output: (pgstrom.nrows()), (pgstrom.pavg(((a.val + b.val))::bigint))
+               GPU Projection: pgstrom.nrows(), pgstrom.pavg(((a.val + b.val))::bigint)
+               GPU Join Quals [1]: (a.id = b.id) [plan: 4167365 -> 4166948, exec: 10000000 -> 10000000]
+               GPU Outer Hash [1]: b.id
+               GPU Inner Hash [1]: a.id
+               GpuJoin buffer usage: 686.65MB
+               GPU Group Key: 
+               Scan-Engine: VFS with GPU0; buffer=44248, ntuples=10000000
+               Buffers: shared hit=88793
+               Worker 0:  actual time=1156.686..1156.691 rows=0 loops=1
+                 Buffers: shared hit=25321
+               Worker 1:  actual time=1181.599..1181.603 rows=1 loops=1
+                 Buffers: shared hit=32675
+               ->  Parallel Seq Scan on public.t_large1 a  (cost=0.00..85957.48 rows=4166948 width=8) (actual time=0.016..216.423 rows=3333333 loops=3)
+                     Output: a.val, a.id
+                     Buffers: shared hit=44288
+                     Worker 0:  actual time=0.022..227.368 rows=3090098 loops=1
+                       Buffers: shared hit=13690
+                     Worker 1:  actual time=0.012..198.534 rows=3660926 loops=1
+                       Buffers: shared hit=16211
+ Planning:
+   Buffers: shared hit=401
+ Planning Time: 1.123 ms
+ Execution Time: 1202.629 ms
+(33 rows)
+
+실행 시간: 1.361379276초

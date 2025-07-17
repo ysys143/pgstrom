@@ -1,0 +1,55 @@
+SET
+                                                                             QUERY PLAN                                                                             
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=304875.84..304875.85 rows=1 width=40) (actual time=2906.953..2962.411 rows=1 loops=1)
+   Output: count(*), avg((a.val + b.val))
+   Buffers: shared hit=88738
+   ->  Gather  (cost=304875.61..304875.83 rows=2 width=40) (actual time=2890.882..2962.390 rows=3 loops=1)
+         Output: (PARTIAL count(*)), (PARTIAL avg((a.val + b.val)))
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=88738
+         ->  Partial Aggregate  (cost=303875.61..303875.62 rows=1 width=40) (actual time=2884.480..2884.483 rows=1 loops=3)
+               Output: PARTIAL count(*), PARTIAL avg((a.val + b.val))
+               Buffers: shared hit=88738
+               Worker 0:  actual time=2883.461..2883.465 rows=1 loops=1
+                 Buffers: shared hit=24370
+               Worker 1:  actual time=2879.329..2879.333 rows=1 loops=1
+                 Buffers: shared hit=33078
+               ->  Parallel Hash Join  (cost=138044.33..272623.51 rows=4166948 width=8) (actual time=1186.825..2743.504 rows=3333333 loops=3)
+                     Output: a.val, b.val
+                     Hash Cond: (b.id = a.id)
+                     Buffers: shared hit=88738
+                     Worker 0:  actual time=1183.066..2766.860 rows=2731888 loops=1
+                       Buffers: shared hit=24370
+                     Worker 1:  actual time=1183.045..2719.467 rows=3846246 loops=1
+                       Buffers: shared hit=33078
+                     ->  Parallel Seq Scan on public.t_large2 b  (cost=0.00..85961.65 rows=4167365 width=8) (actual time=0.014..152.091 rows=3333333 loops=3)
+                           Output: b.id, b.val
+                           Buffers: shared hit=44288
+                           Worker 0:  actual time=0.019..136.286 rows=2731888 loops=1
+                             Buffers: shared hit=12121
+                           Worker 1:  actual time=0.009..160.821 rows=3846246 loops=1
+                             Buffers: shared hit=17019
+                     ->  Parallel Hash  (cost=85957.48..85957.48 rows=4166948 width=8) (actual time=1167.283..1167.284 rows=3333333 loops=3)
+                           Output: a.val, a.id
+                           Buckets: 16777216  Batches: 1  Memory Usage: 522336kB
+                           Buffers: shared hit=44288
+                           Worker 0:  actual time=1182.703..1182.704 rows=2747256 loops=1
+                             Buffers: shared hit=12168
+                           Worker 1:  actual time=1182.828..1182.829 rows=3605830 loops=1
+                             Buffers: shared hit=15978
+                           ->  Parallel Seq Scan on public.t_large1 a  (cost=0.00..85957.48 rows=4166948 width=8) (actual time=0.027..204.426 rows=3333333 loops=3)
+                                 Output: a.val, a.id
+                                 Buffers: shared hit=44288
+                                 Worker 0:  actual time=0.024..232.445 rows=2747256 loops=1
+                                   Buffers: shared hit=12168
+                                 Worker 1:  actual time=0.035..191.061 rows=3605830 loops=1
+                                   Buffers: shared hit=15978
+ Planning:
+   Buffers: shared hit=217
+ Planning Time: 0.727 ms
+ Execution Time: 2962.489 ms
+(49 rows)
+
+실행 시간: 3.111788784초

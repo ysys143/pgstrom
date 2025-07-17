@@ -1,85 +1,190 @@
-Thu Jul 10 14:12:20 2025       
-+---------------------------------------------------------------------------------------+
-| NVIDIA-SMI 535.183.01             Driver Version: 535.183.01   CUDA Version: 12.2     |
-|-----------------------------------------+----------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
-|                                         |                      |               MIG M. |
-|=========================================+======================+======================|
-|   0  NVIDIA GeForce RTX 3060        Off | 00000000:01:00.0 Off |                  N/A |
-|  0%   49C    P8              14W / 170W |    437MiB / 12288MiB |      0%      Default |
-|                                         |                      |                  N/A |
-+-----------------------------------------+----------------------+----------------------+
+=== CUDA 12.9 환경 정보 ===
+CUDA 버전: 12.9
+GPU 개수: 3
+GPU 모델:
+GPU 0: NVIDIA L40S (UUID: GPU-69940b65-67e5-b061-bf93-4d5647ebc58b)
+GPU 1: NVIDIA L40S (UUID: GPU-4f1fd23f-4abe-5e63-35c2-1a17d5845794)
+GPU 2: NVIDIA L40S (UUID: GPU-38f3b104-dcab-a716-56f8-83b491ed1594)
+
+=== 전체 시스템 정보 ===
+Thu Jul 17 11:32:39 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 575.57.08              Driver Version: 575.57.08      CUDA Version: 12.9     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40S                    Off |   00000000:26:00.0 Off |                    0 |
+| N/A   62C    P0             98W /  350W |   42179MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA L40S                    Off |   00000000:8A:00.0 Off |                    0 |
+| N/A   54C    P0            100W /  350W |   42179MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA L40S                    Off |   00000000:B4:00.0 Off |                    0 |
+| N/A   41C    P0             33W /  350W |       3MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
                                                                                          
-+---------------------------------------------------------------------------------------+
-| Processes:                                                                            |
-|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
-|        ID   ID                                                             Usage      |
-|=======================================================================================|
-|    0   N/A  N/A     54681      G   /usr/lib/xorg/Xorg                          101MiB |
-|    0   N/A  N/A     54929      G   /usr/lib/xorg/Xorg                          265MiB |
-|    0   N/A  N/A     55055      G   /usr/bin/gnome-shell                         14MiB |
-|    0   N/A  N/A    118905      G   ...sktop/6574/usr/bin/telegram-desktop        2MiB |
-|    0   N/A  N/A   1545427      G   ...sktop/6597/usr/bin/telegram-desktop        2MiB |
-|    0   N/A  N/A   2782327      G   ...sktop/6691/usr/bin/telegram-desktop        2MiB |
-+---------------------------------------------------------------------------------------+
-Client: Docker Engine - Community
- Version:    28.1.1
- Context:    default
- Debug Mode: false
- Plugins:
-  buildx: Docker Buildx (Docker Inc.)
-    Version:  v0.23.0
-    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
-  compose: Docker Compose (Docker Inc.)
-    Version:  v2.35.1
-    Path:     /usr/libexec/docker/cli-plugins/docker-compose
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         1189428      C   .../aisol/vllm/.venv/bin/python3      42170MiB |
+|    1   N/A  N/A         1189429      C   .../aisol/vllm/.venv/bin/python3      42170MiB |
++-----------------------------------------------------------------------------------------+
 
-Server:
- Containers: 1
-  Running: 1
-  Paused: 0
-  Stopped: 0
- Images: 5
- Server Version: 28.1.1
- Storage Driver: overlay2
-  Backing Filesystem: extfs
-  Supports d_type: true
-  Using metacopy: false
-  Native Overlay Diff: true
-  userxattr: false
- Logging Driver: json-file
- Cgroup Driver: cgroupfs
- Cgroup Version: 1
- Plugins:
-  Volume: local
-  Network: bridge host ipvlan macvlan null overlay
-  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
- Swarm: inactive
- Runtimes: io.containerd.runc.v2 nvidia runc
- Default Runtime: runc
- Init Binary: docker-init
- containerd version: 05044ec0a9a75232cad458027ca83437aae3f4da
- runc version: v1.2.5-0-g59923ef
- init version: de40ad0
- Security Options:
-  apparmor
-  seccomp
-   Profile: builtin
- Kernel Version: 5.15.0-134-generic
- Operating System: Ubuntu 20.04.6 LTS
- OSType: linux
- Architecture: x86_64
- CPUs: 6
- Total Memory: 15.55GiB
- Name: jaesol-PC
- ID: bc483e45-29d0-4bf4-ac99-07d5e07ca603
- Docker Root Dir: /var/lib/docker
- Debug Mode: false
- Experimental: false
- Insecure Registries:
-  ::1/128
-  127.0.0.0/8
- Live Restore Enabled: false
+=== Docker 정보 ===
+host:
+  arch: amd64
+  buildahVersion: 1.39.4
+  cgroupControllers:
+  - memory
+  - pids
+  cgroupManager: systemd
+  cgroupVersion: v2
+  conmon:
+    package: conmon-2.1.12-1.el9.x86_64
+    path: /usr/bin/conmon
+    version: 'conmon version 2.1.12, commit: 5859d6167f22954414ce804d3f2ae9cf6208f929'
+  cpuUtilization:
+    idlePercent: 99.97
+    systemPercent: 0.01
+    userPercent: 0.02
+  cpus: 64
+  databaseBackend: sqlite
+  distribution:
+    distribution: rocky
+    version: "9.6"
+  eventLogger: file
+  freeLocks: 2047
+  hostname: NOB-WDL-GPUSRVR
+  idMappings:
+    gidmap:
+    - container_id: 0
+      host_id: 1001
+      size: 1
+    - container_id: 1
+      host_id: 165536
+      size: 65536
+    uidmap:
+    - container_id: 0
+      host_id: 1001
+      size: 1
+    - container_id: 1
+      host_id: 165536
+      size: 65536
+  kernel: 5.14.0-570.23.1.el9_6.x86_64
+  linkmode: dynamic
+  logDriver: k8s-file
+  memFree: 186975305728
+  memTotal: 540236767232
+  networkBackend: netavark
+  networkBackendInfo:
+    backend: netavark
+    dns:
+      package: aardvark-dns-1.14.0-1.el9.x86_64
+      path: /usr/libexec/podman/aardvark-dns
+      version: aardvark-dns 1.14.0
+    package: netavark-1.14.1-1.el9_6.x86_64
+    path: /usr/libexec/podman/netavark
+    version: netavark 1.14.1
+  ociRuntime:
+    name: crun
+    package: crun-1.21-1.el9_6.x86_64
+    path: /usr/bin/crun
+    version: |-
+      crun version 1.21
+      commit: 10269840aa07fb7e6b7e1acff6198692d8ff5c88
+      rundir: /run/user/1001/crun
+      spec: 1.0.0
+      +SYSTEMD +SELINUX +APPARMOR +CAP +SECCOMP +EBPF +CRIU +YAJL
+  os: linux
+  pasta:
+    executable: /usr/bin/pasta
+    package: passt-0^20250217.ga1e48a0-9.el9_6.x86_64
+    version: ""
+  remoteSocket:
+    exists: true
+    path: /run/user/1001/podman/podman.sock
+  rootlessNetworkCmd: pasta
+  security:
+    apparmorEnabled: false
+    capabilities: CAP_CHOWN,CAP_DAC_OVERRIDE,CAP_FOWNER,CAP_FSETID,CAP_KILL,CAP_NET_BIND_SERVICE,CAP_SETFCAP,CAP_SETGID,CAP_SETPCAP,CAP_SETUID,CAP_SYS_CHROOT
+    rootless: true
+    seccompEnabled: true
+    seccompProfilePath: /usr/share/containers/seccomp.json
+    selinuxEnabled: true
+  serviceIsRemote: false
+  slirp4netns:
+    executable: /usr/bin/slirp4netns
+    package: slirp4netns-1.3.2-1.el9.x86_64
+    version: |-
+      slirp4netns version 1.3.2
+      commit: 0f13345bcef588d2bb70d662d41e92ee8a816d85
+      libslirp: 4.4.0
+      SLIRP_CONFIG_VERSION_MAX: 3
+      libseccomp: 2.5.2
+  swapFree: 34359734272
+  swapTotal: 34359734272
+  uptime: 360h 54m 5.00s (Approximately 15.00 days)
+  variant: ""
+plugins:
+  authorization: null
+  log:
+  - k8s-file
+  - none
+  - passthrough
+  - journald
+  network:
+  - bridge
+  - macvlan
+  - ipvlan
+  volume:
+  - local
+registries:
+  search:
+  - registry.access.redhat.com
+  - registry.redhat.io
+  - docker.io
+store:
+  configFile: /home/aisol/.config/containers/storage.conf
+  containerStore:
+    number: 1
+    paused: 0
+    running: 1
+    stopped: 0
+  graphDriverName: overlay
+  graphOptions: {}
+  graphRoot: /home/aisol/.local/share/containers/storage
+  graphRootAllocated: 321965260800
+  graphRootUsed: 112959279104
+  graphStatus:
+    Backing Filesystem: xfs
+    Native Overlay Diff: "true"
+    Supports d_type: "true"
+    Supports shifting: "false"
+    Supports volatile: "true"
+    Using metacopy: "false"
+  imageCopyTmpDir: /var/tmp
+  imageStore:
+    number: 9
+  runRoot: /run/user/1001/containers
+  transientStore: false
+  volumePath: /home/aisol/.local/share/containers/storage/volumes
+version:
+  APIVersion: 5.4.0
+  Built: 1750148132
+  BuiltTime: Tue Jun 17 17:15:32 2025
+  GitCommit: ""
+  GoVersion: go1.23.9 (Red Hat 1.23.9-1.el9_6)
+  Os: linux
+  OsArch: linux/amd64
+  Version: 5.4.0
 
-Linux jaesol-PC 5.15.0-134-generic #145~20.04.1-Ubuntu SMP Mon Feb 17 13:27:16 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+
+=== 시스템 정보 ===
+Linux NOB-WDL-GPUSRVR 5.14.0-570.23.1.el9_6.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Jun 26 19:29:53 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux

@@ -64,6 +64,7 @@ check_requirements() {
             log_info "CUDA 12.9.1 Rocky Linux 8 이미지 사용 가능 확인됨"
         else
             log_warn "CUDA 12.9.1 이미지를 가져올 수 없습니다. 네트워크 연결을 확인하세요."
+            log_warn "대안으로 사용 가능한 CUDA 12.x 이미지를 사용합니다."
         fi
     fi
     
@@ -74,8 +75,12 @@ check_requirements() {
     fi
     
     # NVIDIA Container Toolkit 확인
-    if ! docker info | grep -q "nvidia"; then
-        log_error "NVIDIA Container Toolkit이 설정되지 않았습니다."
+    log_info "NVIDIA Container Toolkit 확인 중..."
+    if docker run --rm --gpus all docker.io/nvidia/cuda:12.9.1-devel-rockylinux8 nvidia-smi &>/dev/null; then
+        log_info "NVIDIA Container Toolkit이 정상적으로 설정되었습니다."
+    else
+        log_error "NVIDIA Container Toolkit이 설정되지 않았거나 GPU 액세스가 불가능합니다."
+        log_error "다음 명령어로 테스트해보세요: docker run --rm --gpus all docker.io/nvidia/cuda:12.9.1-devel-rockylinux8 nvidia-smi"
         exit 1
     fi
     
@@ -91,20 +96,21 @@ create_directories() {
     log_info "디렉토리 생성 완료"
 }
 
-# Docker 이미지 빌드
-clone_pgstrom_docker() {
-    log_step "PG-Strom Docker 소스 준비 중..."
+# Docker 이미지 빌드 준비
+prepare_docker_build() {
+    log_step "Docker 빌드 환경 준비 중..."
     
     # 프로젝트 루트로 이동
     cd "$PROJECT_ROOT"
     
-    # pg-strom-docker 클론 (이미 존재하지 않는 경우)
-    if [ ! -d "pg-strom-docker" ]; then
-        log_info "pg-strom-docker 클론 중..."
-        git clone https://github.com/ytooyama/pg-strom-docker.git
-    else
-        log_info "pg-strom-docker 디렉토리가 이미 존재합니다."
+    # 기존 pg-strom-docker 디렉토리가 있으면 정리 (더 이상 사용하지 않음)
+    if [ -d "pg-strom-docker" ]; then
+        log_warn "기존 pg-strom-docker 디렉토리가 발견되었습니다. (더 이상 사용하지 않음)"
+        log_info "pg-strom-docker 디렉토리를 제거합니다..."
+        rm -rf pg-strom-docker
     fi
+    
+    log_info "CUDA 12.9 환경을 위한 자체 Dockerfile 생성 준비 완료"
 }
 
 build_docker_image() {
@@ -125,19 +131,28 @@ build_docker_image() {
             cat > "$PROJECT_ROOT/Dockerfile.cuda129" << 'EOF'
 FROM nvidia/cuda:12.9.1-devel-rockylinux8
 
-# PostgreSQL 16 및 PG-Strom 설치
+# PostgreSQL 16 및 PG-Strom v6.0 설치
 RUN dnf -y update && \
     dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    dnf -y module disable postgresql && \
+    dnf -y install epel-release && \
+    dnf config-manager --set-enabled powertools && \
+    dnf -y install perl-IPC-Run perl-Test-Simple && \
     dnf -y install postgresql16-server postgresql16-devel && \
-    dnf -y install https://github.com/heterodb/pg-strom/releases/download/v6.0.2/pg_strom-PG16-6.0.2-1.el8.x86_64.rpm
+    dnf -y install git make gcc redhat-rpm-config rpm-build && \
+    cd /opt && \
+    git clone --branch v6.0 --depth 1 https://github.com/heterodb/pg-strom.git && \
+    cd pg-strom/src && \
+    make PG_CONFIG=/usr/pgsql-16/bin/pg_config USE_PGXS=1 && \
+    make install PG_CONFIG=/usr/pgsql-16/bin/pg_config USE_PGXS=1
 
 # 환경 설정
 ENV PATH /usr/pgsql-16/bin:$PATH
 ENV PGDATA /var/lib/pgsql/16/data
 EXPOSE 5432
 
-# PostgreSQL 사용자 생성
-RUN useradd -m postgres
+# PostgreSQL 사용자 확인 (이미 존재하면 패스)
+RUN id postgres || useradd -m postgres
 
 # 작업 디렉토리 설정
 WORKDIR /home/postgres
@@ -153,10 +168,43 @@ EOF
             rm -f "$PROJECT_ROOT/Dockerfile.cuda129"
             
         else
-            log_info "기존 pg-strom-docker 이미지 빌드 중... (약 5-10분 소요)"
-            cd "$PROJECT_ROOT/pg-strom-docker/docker"
-            docker image build --compress -t $DOCKER_IMAGE -f Dockerfile .
-            cd "$PROJECT_ROOT"
+            log_info "기존 CUDA 환경을 위한 Docker 이미지 빌드 중... (약 5-10분 소요)"
+            # 여기서는 기본 베이스 이미지 사용
+            cat > "$PROJECT_ROOT/Dockerfile.default" << 'EOF'
+FROM nvidia/cuda:12.0-devel-rockylinux8
+
+# PostgreSQL 16 및 PG-Strom v6.0 설치
+RUN dnf -y update && \
+    dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    dnf -y module disable postgresql && \
+    dnf -y install epel-release && \
+    dnf config-manager --set-enabled powertools && \
+    dnf -y install perl-IPC-Run perl-Test-Simple && \
+    dnf -y install postgresql16-server postgresql16-devel && \
+    dnf -y install git make gcc redhat-rpm-config rpm-build && \
+    cd /opt && \
+    git clone --branch v6.0 --depth 1 https://github.com/heterodb/pg-strom.git && \
+    cd pg-strom/src && \
+    make PG_CONFIG=/usr/pgsql-16/bin/pg_config USE_PGXS=1 && \
+    make install PG_CONFIG=/usr/pgsql-16/bin/pg_config USE_PGXS=1
+
+# 환경 설정
+ENV PATH /usr/pgsql-16/bin:$PATH
+ENV PGDATA /var/lib/pgsql/16/data
+EXPOSE 5432
+
+# PostgreSQL 사용자 확인 (이미 존재하면 패스)
+RUN id postgres || useradd -m postgres
+
+# 작업 디렉토리 설정
+WORKDIR /home/postgres
+
+# 기본 명령어
+CMD ["/bin/bash"]
+EOF
+            
+            docker image build --compress -t $DOCKER_IMAGE -f "$PROJECT_ROOT/Dockerfile.default" "$PROJECT_ROOT"
+            rm -f "$PROJECT_ROOT/Dockerfile.default"
         fi
         
         log_info "Docker 이미지 빌드 완료"
@@ -176,8 +224,8 @@ start_container() {
         docker container rm $CONTAINER_NAME 2>/dev/null || true
     fi
     
-    # 새 컨테이너 시작
-    docker container run --gpus all --shm-size=4gb --memory=4gb \
+    # 새 컨테이너 시작 (pg-strom-docker 프로젝트 권장사항 반영)
+    docker container run --gpus all --shm-size=8gb --memory=8gb \
         -p 5432:5432 -itd --name=$CONTAINER_NAME $DOCKER_IMAGE
     
     # 컨테이너 시작 대기
@@ -194,15 +242,17 @@ setup_postgresql() {
     docker container exec $CONTAINER_NAME su - postgres -c \
         "/usr/pgsql-16/bin/initdb -D /var/lib/pgsql/16/data"
     
-    # 설정 파일 수정
+    # 설정 파일 수정 (pg-strom-docker 프로젝트 권장사항 반영)
     docker container exec $CONTAINER_NAME bash -c "
         cd /var/lib/pgsql/16/data
         sed -i \"s/#shared_preload_libraries = ''/shared_preload_libraries = '\\\$libdir\/pg_strom'/g\" postgresql.conf
         sed -i 's/#max_worker_processes = 8/max_worker_processes = 100/g' postgresql.conf
-        sed -i 's/shared_buffers = 128MB/shared_buffers = 2GB/g' postgresql.conf
-        sed -i 's/#work_mem = 4MB/work_mem = 512MB/g' postgresql.conf
+        sed -i 's/shared_buffers = 128MB/shared_buffers = 4GB/g' postgresql.conf
+        sed -i 's/#work_mem = 4MB/work_mem = 1GB/g' postgresql.conf
         sed -i 's/#listen_addresses = .*/listen_addresses = '\''*'\''/g' postgresql.conf
         echo 'host all all 0.0.0.0/0 trust' >> pg_hba.conf
+        echo 'pg_strom.enabled = on' >> postgresql.conf
+        echo 'pg_strom.debug_force_gpudirect = off' >> postgresql.conf
     "
     
     # PostgreSQL 시작
@@ -225,7 +275,7 @@ main() {
     
     check_requirements
     create_directories
-    clone_pgstrom_docker
+    prepare_docker_build
     build_docker_image
     start_container
     setup_postgresql
