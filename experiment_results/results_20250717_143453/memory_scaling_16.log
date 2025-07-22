@@ -1,0 +1,20 @@
+=== 동시 연결 QPS 스케일링 테스트: 16 연결 ===
+동시 연결 수: 16
+테스트 쿼리: SELECT COUNT(*), SUM(val1 + val2), AVG(val3) FROM t_monster WHERE id % 16 = 0 LIMIT 100000;
+
+GPU 모드 QPS (16 연결): [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (30초 동안 16 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .85 QPS (36 쿼리)
+.85
+CPU 모드 QPS (16 연결): [0;32m[INFO][0m QPS 측정 시작: CPU 모드 (30초 동안 16 동시 실행)
+[0;32m[INFO][0m CPU 모드 QPS 측정 완료: 1.36 QPS (56 쿼리)
+1.36
+
+=== 스케일링 분석 ===
+GPU QPS: [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (30초 동안 16 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .85 QPS (36 쿼리)
+.85
+CPU QPS: [0;32m[INFO][0m QPS 측정 시작: CPU 모드 (30초 동안 16 동시 실행)
+[0;32m[INFO][0m CPU 모드 QPS 측정 완료: 1.36 QPS (56 쿼리)
+1.36
+QPS 성능 향상: 1.36배
+GPU 스케일링 효율성: 0 QPS/연결

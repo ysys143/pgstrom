@@ -1,0 +1,17 @@
+                                                                 QUERY PLAN                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=495.88..495.89 rows=1 width=8) (actual time=1.354..1.354 rows=1 loops=1)
+   Buffers: shared hit=163
+   ->  Index Scan using datetime_test_pkey on datetime_test  (cost=0.29..487.32 rows=3423 width=0) (actual time=1.351..1.351 rows=0 loops=1)
+         Index Cond: (id <= 10000)
+         Filter: ((created_at + '1 year'::interval) > modified_at)
+         Rows Removed by Filter: 10000
+         Buffers: shared hit=163
+ Planning:
+   Buffers: shared hit=360
+ Planning Time: 0.756 ms
+ Execution Time: 1.397 ms
+(11 rows)
+
+
+실행 시간: .133976539초

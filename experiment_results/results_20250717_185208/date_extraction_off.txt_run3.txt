@@ -1,0 +1,17 @@
+                                                                    QUERY PLAN                                                                     
+---------------------------------------------------------------------------------------------------------------------------------------------------
+ HashAggregate  (cost=512.99..641.34 rows=10268 width=40) (actual time=2.956..2.968 rows=1 loops=1)
+   Group Key: EXTRACT(year FROM created_at)
+   Batches: 1  Memory Usage: 409kB
+   Buffers: shared hit=163
+   ->  Index Scan using datetime_test_pkey on datetime_test  (cost=0.29..461.65 rows=10268 width=32) (actual time=0.026..1.977 rows=10000 loops=1)
+         Index Cond: (id <= 10000)
+         Buffers: shared hit=163
+ Planning:
+   Buffers: shared hit=407
+ Planning Time: 0.761 ms
+ Execution Time: 3.196 ms
+(11 rows)
+
+
+실행 시간: .087572671초

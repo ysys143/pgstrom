@@ -1,0 +1,8 @@
+=== 연산 복잡도 QPS 테스트: extreme ===
+복잡도: extreme
+수학 함수: sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))
+테스트 쿼리: SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+
+GPU 모드 QPS: [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (30초 동안 8 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .26 QPS (12 쿼리)
+.26

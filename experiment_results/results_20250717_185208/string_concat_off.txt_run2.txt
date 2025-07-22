@@ -1,0 +1,16 @@
+                                                                    QUERY PLAN                                                                    
+--------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=308.45..308.46 rows=1 width=8) (actual time=1.057..1.058 rows=1 loops=1)
+   Buffers: shared hit=30
+   ->  Index Only Scan using string_test_pkey on string_test  (cost=0.29..283.93 rows=9808 width=0) (actual time=0.043..0.773 rows=10000 loops=1)
+         Index Cond: (id <= 10000)
+         Heap Fetches: 0
+         Buffers: shared hit=30
+ Planning:
+   Buffers: shared hit=238
+ Planning Time: 0.663 ms
+ Execution Time: 1.089 ms
+(10 rows)
+
+
+실행 시간: .103234174초

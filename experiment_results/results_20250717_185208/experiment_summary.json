@@ -1,0 +1,33 @@
+{
+  "performance_results": {
+    "string_concat": {
+      "gpu_on": 1.0833333333333333,
+      "gpu_off": 1.097,
+      "improvement_percent": 1.2458219386204845,
+      "faster": "GPU",
+      "runs_count": 3
+    },
+    "string_length": {
+      "gpu_on": 6.940333333333333,
+      "gpu_off": 6.028,
+      "improvement_percent": 15.134925901349266,
+      "faster": "CPU",
+      "runs_count": 3
+    },
+    "date_extraction": {
+      "gpu_on": 3.2063333333333333,
+      "gpu_off": 3.1616666666666666,
+      "improvement_percent": 1.412756984712703,
+      "faster": "CPU",
+      "runs_count": 3
+    },
+    "date_arithmetic": {
+      "gpu_on": 1.344,
+      "gpu_off": 1.36,
+      "improvement_percent": 1.176470588235295,
+      "faster": "GPU",
+      "runs_count": 3
+    }
+  },
+  "timestamp": "2025-07-17 18:52:41"
+}

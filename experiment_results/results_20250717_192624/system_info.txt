@@ -1,0 +1,23 @@
+=== 시스템 정보 ===
+실험 일시: 2025-07-17 19:26:24
+서버: NOB-WDL-GPUSRVR
+OS: Linux NOB-WDL-GPUSRVR 5.14.0-570.23.1.el9_6.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Jun 26 19:29:53 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+
+=== GPU 정보 ===
+NVIDIA L40S, 46068, 575.57.08
+NVIDIA L40S, 46068, 575.57.08
+NVIDIA L40S, 46068, 575.57.08
+
+=== PostgreSQL 버전 ===
+                                                 version                                                 
+---------------------------------------------------------------------------------------------------------
+ PostgreSQL 16.9 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-26), 64-bit
+(1 row)
+
+
+=== PG-Strom 설정 ===
+ pg_strom.enabled 
+------------------
+ on
+(1 row)
+

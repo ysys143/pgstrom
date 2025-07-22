@@ -1,0 +1,21 @@
+=== GPU 모드 QPS 측정 ===
+측정 시간: 30초
+동시 실행: 4개 쿼리
+시작 시간: Thu Jul 17 02:40:24 PM KST 2025
+
+WORKER_1:COMPLETED:4:33.890254761
+WORKER_4:COMPLETED:4:35.858931158
+WORKER_2:COMPLETED:4:35.869181435
+WORKER_3:COMPLETED:4:35.928519547
+
+=== 결과 집계 ===
+실제 측정 시간: 36초
+Worker 1: 4 쿼리 완료
+Worker 2: 4 쿼리 완료
+Worker 3: 4 쿼리 완료
+Worker 4: 4 쿼리 완료
+
+총 완료 쿼리: 16
+QPS (Query Per Second): .44
+평균 쿼리 실행 시간: 8.8466초
+종료 시간: Thu Jul 17 02:41:00 PM KST 2025

@@ -1,0 +1,33 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0  19576  3584 pts/0    Ss+  02:32   0:00 /bin/bash
+postgres     228  0.0  0.0 5084404 35500 ?       Ss   02:32   0:03 /usr/pgsql-16/bin/postgres -D /var/lib/pgsql/16/data
+postgres     231  0.0  0.0 241452  6760 ?        Ss   02:32   0:00 postgres: logger 
+postgres   15880  0.0  0.0 5084540 10240 ?       Ss   04:44   0:00 postgres: checkpointer 
+postgres   15881  0.0  0.0 5084580 9216 ?        Ss   04:44   0:00 postgres: background writer 
+postgres   15882  0.0  0.0 5084404 6144 ?        Ss   04:44   0:00 postgres: walwriter 
+postgres   15883  0.0  0.0 5086036 11264 ?       Ss   04:44   0:00 postgres: autovacuum launcher 
+postgres   15885  0.0  0.0 5086072 8192 ?        Ss   04:44   0:00 postgres: logical replication launcher 
+postgres   15890 20.7  0.4 28340972 2560228 ?    Ssl  04:44  17:33 postgres: PG-Strom GPU Service 
+root       20670  0.0  0.0  59436  4608 ?        Ss   06:08   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20671 20.0  0.0 5227324 36324 ?       Ssl  06:08   0:05 postgres: postgres testdb [local] SELECT
+root       20674  0.0  0.0  59436  5632 ?        Ss   06:08   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20675 20.5  0.0 5227324 37852 ?       Ssl  06:08   0:05 postgres: postgres testdb [local] SELECT
+root       20678  0.0  0.0  59436  5120 ?        Ss   06:08   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20679 21.3  0.0 5227324 35428 ?       Ssl  06:08   0:05 postgres: postgres testdb [local] SELECT
+root       20682  0.0  0.0  59436  5120 ?        Ss   06:08   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20683 21.2  0.0 5227324 35188 ?       Ssl  06:08   0:05 postgres: postgres testdb [local] SELECT
+root       20691  0.0  0.0  59436  5632 ?        Ss   06:09   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20692  1.0  0.0 5227324 33796 ?       Dsl  06:09   0:00 postgres: postgres testdb [local] SELECT
+postgres   20693  2.0  0.0 5226508 31872 ?       Dsl  06:09   0:00 postgres: parallel worker for PID 20692 
+postgres   20694  5.0  0.0 5288104 92144 ?       Dsl  06:09   0:00 postgres: parallel worker for PID 20692 
+root       20701  0.0  0.0  59436  5120 ?        Ss   06:09   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20702  1.0  0.0 5227324 33796 ?       Dsl  06:09   0:00 postgres: postgres testdb [local] SELECT
+postgres   20705  1.0  0.0 5226508 31580 ?       Dsl  06:09   0:00 postgres: parallel worker for PID 20702 
+postgres   20706  1.0  0.0 5226508 31872 ?       Dsl  06:09   0:00 postgres: parallel worker for PID 20702 
+root       20711  0.0  0.0  59436  5120 ?        Ss   06:09   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20712  1.0  0.0 5227324 33792 ?       Dsl  06:09   0:00 postgres: postgres testdb [local] SELECT
+postgres   20714  1.0  0.0 5226508 32256 ?       Dsl  06:09   0:00 postgres: parallel worker for PID 20712 
+postgres   20715  1.0  0.0 5226508 31744 ?       Dsl  06:09   0:00 postgres: parallel worker for PID 20712 
+root       20721  0.0  0.0  59436  5120 ?        Ss   06:09   0:00 psql -U postgres -d testdb -c SET pg_strom.enabled = on; -c SELECT COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))), AVG(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1) + exp(val2/1000) + pow(val3, 0.5) + atan2(sin(val1), cos(val2))) FROM t_monster WHERE id <= 10000000;
+postgres   20722  0.0  0.0 5084560 4608 ?        Ds   06:09   0:00 postgres: postgres testdb [local] initializing
+root       20723  0.0  0.0  44784  3072 ?        Rs   06:09   0:00 ps aux

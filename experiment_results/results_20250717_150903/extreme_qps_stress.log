@@ -1,0 +1,21 @@
+=== 극한 QPS 스트레스 테스트 ===
+측정 시간: 60초 (확장)
+동시 실행: 16 연결
+테스트 쿼리: SELECT (id % 500) as bucket, COUNT(*), SUM(sin(val1) + cos(val2) + sqrt(abs(val3)) + log(val1 + 1)), AVG(pow(val2, 0.5)) FROM t_monster WHERE id <= 30000000 GROUP BY id % 500 LIMIT 200;
+
+GPU 극한 QPS: [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (60초 동안 16 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .39 QPS (33 쿼리)
+.39
+CPU 비교 QPS: [0;32m[INFO][0m QPS 측정 시작: CPU 모드 (30초 동안 16 동시 실행)
+[0;32m[INFO][0m CPU 모드 QPS 측정 완료: .45 QPS (16 쿼리)
+.45
+
+=== 극한 성능 분석 ===
+GPU 극한 QPS: [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (60초 동안 16 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .39 QPS (33 쿼리)
+.39
+CPU 비교 QPS: [0;32m[INFO][0m QPS 측정 시작: CPU 모드 (30초 동안 16 동시 실행)
+[0;32m[INFO][0m CPU 모드 QPS 측정 완료: .45 QPS (16 쿼리)
+.45
+극한 가속 효과: .45배
+최대 동시 연결: 16

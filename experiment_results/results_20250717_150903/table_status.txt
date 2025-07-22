@@ -1,0 +1,3 @@
+ public.t_monster | 7304 MB |         0
+ public.t_test    | 1780 MB |         0
+ public.t_join    | 71 MB   |         0

@@ -1,0 +1,29 @@
+=== CPU 모드 QPS 측정 ===
+측정 시간: 30초
+동시 실행: 8개 쿼리
+시작 시간: Thu Jul 17 03:23:43 PM KST 2025
+
+WORKER_7:COMPLETED:3:30.111288548
+WORKER_5:COMPLETED:2:30.814004718
+WORKER_8:COMPLETED:2:30.906574676
+WORKER_3:COMPLETED:2:31.018587236
+WORKER_1:COMPLETED:2:31.129992005
+WORKER_2:COMPLETED:4:37.690116570
+WORKER_6:COMPLETED:4:37.804236305
+WORKER_4:COMPLETED:4:37.871500607
+
+=== 결과 집계 ===
+실제 측정 시간: 38초
+Worker 1: 2 쿼리 완료
+Worker 2: 4 쿼리 완료
+Worker 3: 2 쿼리 완료
+Worker 4: 4 쿼리 완료
+Worker 5: 2 쿼리 완료
+Worker 6: 4 쿼리 완료
+Worker 7: 3 쿼리 완료
+Worker 8: 2 쿼리 완료
+
+총 완료 쿼리: 23
+QPS (Query Per Second): .60
+평균 쿼리 실행 시간: 11.6237초
+종료 시간: Thu Jul 17 03:24:21 PM KST 2025

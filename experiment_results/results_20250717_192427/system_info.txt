@@ -1,0 +1,8 @@
+=== 시스템 정보 ===
+실험 일시: 2025-07-17 19:24:27
+서버: NOB-WDL-GPUSRVR
+OS: Linux NOB-WDL-GPUSRVR 5.14.0-570.23.1.el9_6.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Jun 26 19:29:53 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+
+=== GPU 정보 ===
+Field "cuda_version" is not a valid field to query.
+

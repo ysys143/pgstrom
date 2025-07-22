@@ -1,0 +1,19 @@
+=== 메모리 병목 QPS 테스트: 10M 행 ===
+데이터 크기: 10000000 행
+테스트 쿼리: SELECT COUNT(*), SUM(sin(val1) + cos(val2)), AVG(sqrt(abs(val3))) FROM t_monster WHERE id <= 10000000;
+
+GPU 모드 QPS: [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (30초 동안 8 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .33 QPS (12 쿼리)
+.33
+CPU 모드 QPS: [0;32m[INFO][0m QPS 측정 시작: CPU 모드 (30초 동안 8 동시 실행)
+[0;32m[INFO][0m CPU 모드 QPS 측정 완료: .53 QPS (22 쿼리)
+.53
+
+=== QPS 성능 비교 ===
+GPU QPS: [0;32m[INFO][0m QPS 측정 시작: GPU 모드 (30초 동안 8 동시 실행)
+[0;32m[INFO][0m GPU 모드 QPS 측정 완료: .33 QPS (12 쿼리)
+.33
+CPU QPS: [0;32m[INFO][0m QPS 측정 시작: CPU 모드 (30초 동안 8 동시 실행)
+[0;32m[INFO][0m CPU 모드 QPS 측정 완료: .53 QPS (22 쿼리)
+.53
+QPS 성능 향상: .53배

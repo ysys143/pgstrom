@@ -1,0 +1,3 @@
+ERROR:  relation "string_datetime_test" does not exist
+LINE 14: FROM string_datetime_test 
+              ^
